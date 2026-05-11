@@ -43,15 +43,16 @@ jobs:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Build Debug APK
+        env:
+          ANDROID_HOME: ${{ env.ANDROID_HOME }}
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
         run: |
-          set -o pipefail
-          echo "Gradle version:"
+          set -euxo pipefail
+          echo "ANDROID_HOME=${ANDROID_HOME:-NOT_SET}"
+          echo "sdk.dir=${ANDROID_HOME}" > local.properties
+          ls -la local.properties
           gradle --version
-          echo "Project tasks:"
-          gradle tasks --all 2>&1 | head -20
-          echo "Building..."
-          gradle assembleDebug --stacktrace --warning-mode all 2>&1 | tee build.log
-          echo "Exit code: $?"
+          gradle assembleDebug --stacktrace --warning-mode all --no-daemon 2>&1 | tee build.log
 
       - name: Find APK
         run: find . -name "*.apk" -o -name "*.aab" 2>/dev/null || echo "No APK/AAB found"
