@@ -48,7 +48,7 @@ android {
 
 dependencies {
     // ── Compose BOM ──
-    val composeBom = platform("androidx.compose:compose-bom:2026.04.01")
+    val composeBom = platform("androidx.compose:compose-bom:2025.10.00")
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
